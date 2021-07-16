@@ -133,8 +133,13 @@ class ProductsController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        $countChildren = $product->children()->count();
+
         $data = $request->validate([
             'status'    => 'required',
+            'size'      => Rule::requiredIf( fn () => $product->type !== 'child'),
+            'level'     => Rule::requiredIf( fn () => $product->type !== 'child'),
+            'cost_unit' => Rule::requiredIf( fn () => $product->type !== 'child'),
             'amount'    => 'required_if:received,true|required_if:addExpense,true|numeric',
             'currency'  => 'required_if:received,true|required_if:addExpense,true',
             'note'      => '',
@@ -187,14 +192,22 @@ class ProductsController extends Controller
             }
 
             if($product->status !== $data['status'] || $received){
+                $product->status = $received ? 3 : $data['status'];
+            }
 
-                $product->update([
-                    'status' => $received ? 3 : $data['status']
+            $product->cost_unit = $data['cost_unit'];
+
+            if($product->type !== 'child'){
+                $product->level = $data['level'];
+                $product->size = $data['size'];
+
+                $product->children()->update([
+                    'cost_unit' => $data['cost_unit']
                 ]);
             }
 
+            $product->save();
         });
-
 
 
         $id = $product->parent ?? $product->id;

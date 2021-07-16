@@ -13,6 +13,8 @@ import axios from "axios";
 import useModal from "../../../Uses/useModal";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
 import {useEffect, useState} from "react";
+import SecondaryButton from "../../../Components/Buttons/SecondaryButton";
+import PrimaryButton from "../../../Components/Buttons/PrimaryButton";
 
 function Orders (props)
 {
@@ -161,13 +163,17 @@ function Actions (props)
             {_.includes([4,5], sale.pivot.status.value) && !finalOrder &&
                 <FiRotateCcw class="hover:opacity-100 opacity-50 cursor-pointer" onClick={reSale}/>
             }
+
             {sale.pivot.status.value === 2 &&
                 <CompleteSaleConfirm sale={sale} setProduct={setProduct}/>
             }
+
             {!_.includes([4,5], sale.pivot.status.value) && (!finalOrder || (finalOrder.id === sale.id && finalOrder.pivot.status.value !== 3)) &&
                 <LockCustomerConfirm sale={sale} setProduct={setProduct} isLock={isLock} setLock={setLock}/>
             }
-            <FiEye class="hover:opacity-100 opacity-50 cursor-pointer"/>
+
+            <ShowOrder sale={sale} setProduct={setProduct}/>
+
             {(!finalOrder || finalOrder.pivot.status.value === 2) &&
                 <FiEdit3 class="hover:opacity-100 opacity-50 cursor-pointer"/>
             }
@@ -176,6 +182,49 @@ function Actions (props)
                 <FiXCircle class="hover:opacity-100 opacity-50 cursor-pointer" onClick={deleteSale}/>
             }
         </div>
+    )
+}
+
+function ShowOrder (props)
+{
+    const {sale, setProduct} = props;
+
+    const { openModal, closeModal, isOpen, Modal } = useModal({
+        background: "rgba(0, 0, 0, 0.5)"
+    });
+
+    const handleDelete = () =>
+    {
+        // axios.put(`${window.baseApiPath}/products/${sale.pivot.product_id}/complete/${sale.id}`)
+        //     .then(r => {
+        //         setProduct(r.data)
+        //         closeModal()
+        //     })
+    }
+
+    return(
+        <>
+            <FiEye class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
+            {isOpen &&
+            <Modal>
+                <div className="bg-white shadow-lg rounded-lg" style={{width: '500px'}}>
+                    <div className="font-semibold text-lg p-4 mb-6">
+                        הזמנה/הצעת מחיר
+                    </div>
+                    <div>
+                        <div className="px-5 py-3.5 bg-gray-100 flex justify-end space-s-4 rounded-b-lg">
+                            <SecondaryButton tag="a" onClick={closeModal}>
+                                ביטול
+                            </SecondaryButton>
+                            <PrimaryButton onClick={handleDelete}>
+                                אישור
+                            </PrimaryButton>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+            }
+        </>
     )
 }
 

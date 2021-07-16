@@ -89,6 +89,7 @@ function UpdateProductStatusAndExpenses (props)
             immediatePayment: productData.immediatePayment,
             size: productData.size,
             level: productData.level,
+            cost_unit: productData.cost_unit,
         });
 
         send.then(function (res) {
@@ -171,7 +172,7 @@ function UpdateProductStatusAndExpenses (props)
                         </div>
                     }
                     <div className="grid grid-cols-4 gap-4">
-                        {productData.type === 'package' &&
+                        {productData.type !== 'child' &&
                             <>
                                 <div className="col-span-4">
                                     <FormElements.Number
@@ -191,6 +192,16 @@ function UpdateProductStatusAndExpenses (props)
                                         onChange={handleChange}
                                         name="level"
                                         errors={errors.level}
+                                    />
+                                </div>
+                                <div className="col-span-4">
+                                    <FormElements.Number
+                                        label={`מחיר עלות ${productData.name?.type === 'package' ? 'יחידה/עמוד' : ''}`}
+                                        placeholder="מחיר"
+                                        value={productData.cost_unit}
+                                        onChange={handleChange}
+                                        name="cost_unit"
+                                        errors={errors.cost_unit}
                                     />
                                 </div>
                             </>
