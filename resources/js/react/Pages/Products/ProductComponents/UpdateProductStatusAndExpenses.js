@@ -235,7 +235,7 @@ function UpdateProductStatusAndExpenses (props)
                         </>
                         }
 
-                        {product.name.type !== 'package' && (!product.children || !product.children.length) && product.status.value < 2 &&
+                        {product.name.type !== 'package' && (!product.children || !product.children.length) && product.status.value <= 2 &&
                         <div className="col-span-2">
                             <FormElements.Switcher
                                 label="עדכן קבלת מוצר"
