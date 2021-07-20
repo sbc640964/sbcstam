@@ -166,7 +166,7 @@ function UpdateProductStatusAndExpenses (props)
         >
             <form onSubmit={handleSubmit} className="h-full flex flex-col">
                 <div className="p-6 pb-4">
-                    <Heading3>עדכון {parent ? parent.name.children.labels[1] : 'מוצר'}</Heading3>
+                    <Heading3>עדכון {parent ? (parent.name.children?.labels[1] ?? parent.name.label) : 'מוצר'}</Heading3>
                     <Description>מזהה: {product.id}, {product.name.label ? product.name.label : product.description}</Description>
                 </div>
                 <ScrollBoxShadow maxHeight="75vh">

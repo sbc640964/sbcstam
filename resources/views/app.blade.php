@@ -9,6 +9,7 @@
     <script>
         window.basePath = "{{request()->root()}}";
         window.baseApiPath = "{{request()->root()}}/api";
+        window.exchangeRatesUSD = {{\App\Utils::getExchangeRates('USD')}}
     </script>
 </head>
 <body>

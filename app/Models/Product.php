@@ -17,7 +17,7 @@ class Product extends Model
     ];
 
     protected $appends = [
-
+        'children_count'
     ];
 
     public function expense()
@@ -164,6 +164,13 @@ class Product extends Model
             'ILS' => $currency === 'ILS' ? $amount : $amount * $exchange_rates,
             'original' => $amount
         ];
+    }
+
+    public function getChildrenCountAttribute()
+    {
+        if($this->attributes['type'] !== 'package') return null;
+
+        return $this->children()->count();
     }
 
 //    לא טוב, צריך להשיג כל יום את השער

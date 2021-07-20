@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Utils;
 use Illuminate\Http\Request;
 
 class PaymentsController extends Controller
@@ -27,15 +28,15 @@ class PaymentsController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        Payment::create(array_merge($request->validate([
+            'amount'    => 'required|numeric',
+            'currency'  => 'required',
+            'to'        => 'nullable',
+            'method'    => 'nullable'
+        ]), ['exchange_rates' => Utils::getExchangeRates('USD')]));
     }
 
     /**

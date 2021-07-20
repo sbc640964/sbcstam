@@ -1,13 +1,13 @@
-import PrimaryButton from "../../Components/Buttons/PrimaryButton";
 import useBaseModal from "../../Uses/useBaseModal";
 import AddExpenseForm from "./AddExpenseForm";
-import {FiPlus} from 'react-icons/fi'
+import AddPaymentForm from "./AddPaymentForm";
 
 function Overview (props)
 {
     return(
-        <div>
+        <div className="flex space-s-2">
             <AddExpense/>
+            <AddPayment/>
         </div>
     )
 }
@@ -32,6 +32,30 @@ function AddExpense (props)
                         closeModal={closeModal}
                     />
                 </Modal>
+            }
+        </>
+
+    )
+}
+
+function AddPayment (props)
+{
+
+    const {closeModal, isOpen, Modal, openModal} = useBaseModal();
+
+    return(
+        <>
+            <a onClick={openModal}
+               className="bg-primary-600 text-white hover:bg-primary-500 rounded-lg font-semibold cursor-pointer p-2 px-4 text-sm"
+            >
+                הוסף תשלום
+            </a>
+            {isOpen &&
+            <Modal>
+                <AddPaymentForm
+                    closeModal={closeModal}
+                />
+            </Modal>
             }
         </>
 

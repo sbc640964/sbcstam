@@ -15,7 +15,10 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        return Product::with('seller')->whereIn('type', ['package', 'simple'])->paginate(request('per_page' ?? 20));
+        $products = new Product();
+        $products->setAppends(['children_count']);
+        $products = $products->with('seller')->whereIn('type', ['package', 'simple'])->paginate(request('per_page' ?? 20));
+        return $products;
     }
 
     /**
@@ -104,7 +107,7 @@ class ProductsController extends Controller
 
                            foreach (range(0, $data['qty'] -1) as $k => $c){
                                array_push($children, array_merge($productInsert, [
-                                   'description' => "מזוזה " . ($k + 1),
+                                   'description' => data_get($product->name, 'children.labels.0', data_get($product->name, 'label', 'יחידה')) . ' ' . ($k + 1),
                                    'type' => 'child',
                                ]));
                            }

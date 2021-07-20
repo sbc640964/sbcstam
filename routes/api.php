@@ -4,6 +4,7 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\ListsDataController;
 use App\Http\Controllers\OptionsController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\RolesController;
@@ -46,7 +47,7 @@ Route::prefix('products')->group(function () {
     Route::put('/{product}/complete/{order}', [ProductsController::class, 'completeOrder']);
 });
 
-Route::prefix('profiles')->middleware(['web'])->group(function () {
+Route::prefix('profiles')->group(function () {
     Route::get('/', [ProfilesController::class, 'index']);
     Route::post('/', [ProfilesController::class, 'store']);
     Route::get('/{profile}', [ProfilesController::class, 'show']);
@@ -54,25 +55,31 @@ Route::prefix('profiles')->middleware(['web'])->group(function () {
     Route::delete('/{profile}', [ProfilesController::class, 'destroy']);
 });
 
-Route::prefix('roles')->middleware(['web'])->group(function () {
+Route::prefix('roles')->group(function () {
     Route::get('/', [RolesController::class, 'index']);
 });
 
-Route::prefix('orders')->middleware(['web'])->group(function() {
+Route::prefix('orders')->group(function() {
     Route::get('/', [OrdersController::class, 'index']);
     Route::post('/', [OrdersController::class, 'store']);
     Route::delete('/{order}', [OrdersController::class, 'destroy']);
 });
 
-Route::prefix('options')->middleware(['web'])->group(function() {
+Route::prefix('options')->group(function() {
     Route::post('/', [OptionsController::class, 'store']);
 });
 
-Route::prefix('expenses')->middleware(['web'])->group(function(){
+Route::prefix('expenses')->group(function(){
     Route::post('/', [ExpensesController::class, 'storeGeneral']);
 });
-Route::get('lists-data/{listName}', [ListsDataController::class, 'index'])->middleware(['web']);
+
+Route::prefix('payments')->group(function(){
+    Route::post('/', [PaymentsController::class, 'store']);
+});
+
+
+Route::get('lists-data/{listName}', [ListsDataController::class, 'index']);
 
 Route::get('exchange-rates/{currency}', function ($currency){
     return Utils::getExchangeRates($currency);
-})->middleware(['web']);
+});

@@ -17,8 +17,6 @@ function App() {
 
     const [globalState, dispatch] = useReducer(globalReducer, initialState);
 
-    axios.get(window.baseApiPath + '/exchange-rates/USD').then(r => window.exchangeRatesUSD = r.data);
-
     const MyToast = (props) => {
         //console.log(props)
         return(
@@ -46,7 +44,10 @@ function App() {
                       <div className="flex items-center justify-center text-primary-900 w-64 font-bold text-2xl">
                           SBC STAM
                       </div>
-                      <div className="pe-4">
+                      <div className="pe-4 flex items-center">
+                          <div>
+                              {window.exchangeRatesUSD}
+                          </div>
                           <CurrencySwitcher/>
                       </div>
                   </header>

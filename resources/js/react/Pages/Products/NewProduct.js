@@ -193,14 +193,16 @@ function NewProduct(props)
                                 />
                             </div>
                             <div className="col-span-4 lg:col-span-2">
-                                <FormElements.Select
+                                <FormElements.Select2
                                     label="כתב"
                                     placeholder="בחר כתב"
-                                    value={newProduct.type_writing?.label ?? ''}
+                                    value={newProduct.type_writing ?? ''}
                                     onChange={handleChange}
                                     name="type_writing"
+                                    search={false}
                                     errors={errors.type_writing}
-                                    options={TypeWriting}
+                                    urlOptions={`${window.baseApiPath}/lists-data/typeWriting`}
+                                    selectorView={i => i?.label ?? ''}
                                 />
                             </div>
                             <div className="col-span-4 lg:col-span-2">

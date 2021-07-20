@@ -67,6 +67,7 @@ function Products (props)
                     columns={[
                         {label: 'מזהה', selector: 'id', width: '60px'},
                         {label: 'שם המוצר', sortable: true, type: 'cal', cal: ProductName },
+                        {label: 'סוג', type: 'cal', cal: TypeBadge },
                         {label: 'מוכר', type: 'cal', cal: SellerName},
                         {label: 'עלות', selector: ''},
                         {label: 'סטטוס', type: 'cal', cal: (row, col, options) => _.find(ProductStatuses, v => v.value == row.status)?.label },
@@ -80,3 +81,18 @@ function Products (props)
 }
 
 export default Products;
+
+
+function TypeBadge (row, col, options)
+{
+    return(
+        <div className="flex justify-center items-center">
+            {row.type === 'package' ?
+            <span className="bg-pink-100 text-pink-700 rounded-full p-1 px-2 text-xs font-semibold">
+                חבילה, {row.children_count} {row.name.children?.labels ? row.name.children?.labels[0] : 'יחידות'}
+            </span>
+                : <span className="bg-gray-100 text-gray-700 rounded-full p-1 px-2 text-xs font-semibold">יחיד</span>
+            }
+        </div>
+    )
+}
