@@ -13,7 +13,7 @@
     <div class="text-center mb-2">
         <h1 class="text-2xl font-bold">רישום משתמש חדש</h1>
     </div>
-    <form action="{{route('login')}}" method="POST" class="flex-col flex space-y-4">
+    <form action="{{route('createUser')}}" method="POST" class="flex-col flex space-y-4">
         @csrf
         <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
             <div class="text-sm">שם משתמש</div>
@@ -36,6 +36,9 @@
                 רישום
             </button>
         </div>
+        @error('username')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
     </form>
 </div>
 </body>

@@ -226,7 +226,7 @@ function EditProfile ({profile, hidden})
                                         onChange={handleChange}
                                         name="type_writing"
                                         errors={errors.type_writing}
-                                        options={TypeWriting}
+                                        urlOptions={`${window.baseApiPath}/lists-data/typeWriting`}
                                         selectorView="label"
                                         values={newProfile.type_writing ? [...newProfile.type_writing] : []}
                                     />

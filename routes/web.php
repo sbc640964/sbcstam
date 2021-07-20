@@ -29,6 +29,8 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');//->middleware('auth');
 
+Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'register'])->name('createUser');//->middleware('auth');
+
 
 Route::get('/{any}', function () {
     return view('app');

@@ -10,11 +10,7 @@ import {useToasts} from "react-toast-notifications";
 import axios from "axios";
 import _ from 'lodash';
 import {Redirect} from "react-router-dom";
-
-import Products from '../../ObjectsData/Products'
-import ProductStatuses from '../../ObjectsData/ProductStatuses'
 import TypeWriting from '../../ObjectsData/TypeWriting'
-import Switcher from "../../Components/Forms/Switcher";
 import Community from "../../ObjectsData/Community";
 
 function NewProfile (props)
@@ -237,9 +233,9 @@ function NewProfile (props)
                                             onChange={handleChange}
                                             name="type_writing"
                                             errors={errors.type_writing}
-                                            options={TypeWriting}
                                             selectorView="label"
                                             values={newProfile.type_writing ?? ''}
+                                            urlOptions={`${window.baseApiPath}/lists-data/typeWriting`}
                                         />
                                     </div>
 
