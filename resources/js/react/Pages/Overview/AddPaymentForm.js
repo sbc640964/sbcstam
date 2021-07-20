@@ -90,7 +90,7 @@ function AddPaymentForm(props)
             onSubmit={handleSubmit}
         >
             <div className="p-6">
-                <Heading3>עדכון הוצאה/חוב חדש</Heading3>
+                <Heading3>עדכון תשלום</Heading3>
                 <br/>
                 <div className="col-span-4">
                     <FormElements.Select

@@ -266,11 +266,11 @@ class ObjectsData
             ['value' => 10, 'label' => 'קלף', 'roles' => ['scribe_shop']],
             ['value' => 11, 'label' => 'תפירה', 'roles' => ['tailor']],
             ['value' => 11, 'label' => 'תיוג', 'roles' => ['labeling']],
-            ['value' => 12, 'label' => 'משרד', 'roles'],
-            ['value' => 13, 'label' => 'שכירות ותשלומים'],
-            ['value' => 14, 'label' => 'משכורות',],
-            ['value' => 15, 'label' => 'בונוס',],
-            ['value' => 16, 'label' => 'צדקה'],
+            ['value' => 12, 'label' => 'משרד', 'roles' => []],
+            ['value' => 13, 'label' => 'שכירות ותשלומים', 'roles' => []],
+            ['value' => 14, 'label' => 'משכורות', 'roles' => []],
+            ['value' => 15, 'label' => 'בונוס', 'roles' => []],
+            ['value' => 16, 'label' => 'צדקה', 'roles' => []],
         ]);
     }
 
