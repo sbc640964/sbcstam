@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\expense;
+use App\Models\Expense;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Utils;
