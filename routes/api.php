@@ -46,7 +46,7 @@ Route::prefix('products')->group(function () {
     Route::put('/{product}/complete/{order}', [ProductsController::class, 'completeOrder']);
 });
 
-Route::prefix('profiles')->group(function () {
+Route::prefix('profiles')->middleware(['web'])->group(function () {
     Route::get('/', [ProfilesController::class, 'index']);
     Route::post('/', [ProfilesController::class, 'store']);
     Route::get('/{profile}', [ProfilesController::class, 'show']);
@@ -54,25 +54,25 @@ Route::prefix('profiles')->group(function () {
     Route::delete('/{profile}', [ProfilesController::class, 'destroy']);
 });
 
-Route::prefix('roles')->group(function () {
+Route::prefix('roles')->middleware(['web'])->group(function () {
     Route::get('/', [RolesController::class, 'index']);
 });
 
-Route::prefix('orders')->group(function() {
+Route::prefix('orders')->middleware(['web'])->group(function() {
     Route::get('/', [OrdersController::class, 'index']);
     Route::post('/', [OrdersController::class, 'store']);
     Route::delete('/{order}', [OrdersController::class, 'destroy']);
 });
 
-Route::prefix('options')->group(function() {
+Route::prefix('options')->middleware(['web'])->group(function() {
     Route::post('/', [OptionsController::class, 'store']);
 });
 
-Route::prefix('expenses')->group(function(){
+Route::prefix('expenses')->middleware(['web'])->group(function(){
     Route::post('/', [ExpensesController::class, 'storeGeneral']);
 });
-Route::get('lists-data/{listName}', [ListsDataController::class, 'index']);
+Route::get('lists-data/{listName}', [ListsDataController::class, 'index'])->middleware(['web']);
 
 Route::get('exchange-rates/{currency}', function ($currency){
     return Utils::getExchangeRates($currency);
-});
+})->middleware(['web']);

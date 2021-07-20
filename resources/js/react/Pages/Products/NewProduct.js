@@ -264,7 +264,7 @@ function NewProduct(props)
                                         disabledLabel="לא"
                                         enabledLabel="כן"
                                         errors={errors.initial_expenditure_auto}
-                                        description="סמן רק עם הסכום מוכן במלואו"
+                                        description="סמן רק אם קיבלת את המוצר במלואו"
                                     />
                                 </div>
                             }

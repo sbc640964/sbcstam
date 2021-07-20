@@ -25,7 +25,7 @@ function ChildrenProduct (props)
             <div className="grid grid-cols-3 gap-6 py-4 px-5" id="children">
                 <div className="col-span-12 flex justify-between items-center">
                     <div>
-                        <Heading3>{product.type === 'package' ? product.name.children.labels[0] : 'מוצרים בחבילה'}</Heading3>
+                        <Heading3>{(product.type === 'package' ? product.name.children?.labels[0] : 'מוצרים בחבילה') ?? 'יחידות'}</Heading3>
                         <Description>מוצרים משוייכים למוצר זה</Description>
                     </div>
                     <div className="pe-2">

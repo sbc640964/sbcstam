@@ -11,11 +11,9 @@ class ObjectsData
     static public function typeWriting()
     {
         return collect([
-            ["value" => 1, "label" => 'אשכנזי'],
-            ["value" => 2, "label" => 'ספרדי'],
-            ["value" => 3, "label" => 'אר"י'],
-            ["value" => 4, "label" => 'וועליש'],
-            ["value" => 5, "label" => 'סודי'],
+            ["value" => 1, "label" => 'ב"י'],
+            ["value" => 2, "label" => 'אר"י'],
+            ["value" => 3, "label" => 'וועליש'],
         ]);
     }
 
@@ -267,7 +265,13 @@ class ObjectsData
             ['value' => 9, 'label' => 'אחר'],
             ['value' => 10, 'label' => 'קלף', 'roles' => ['scribe_shop']],
             ['value' => 11, 'label' => 'תפירה', 'roles' => ['tailor']],
-            ['value' => 11, 'label' => 'תיוג', 'roles' => ['labeling'], 'toSeller' => true],
+            ['value' => 11, 'label' => 'תיוג', 'roles' => ['labeling']],
+            ['value' => 12, 'label' => 'משרד', 'roles' => ['office']],
+            ['value' => 13, 'label' => 'שכירות ותשלומים', 'roles' => ['office']],
+            ['value' => 14, 'label' => 'משכורות', 'roles' => ['office']],
+            ['value' => 15, 'label' => 'בונוס', 'roles' => ['office']],
+            ['value' => 16, 'label' => 'צדקה', 'roles' => ['office']],
+            ['value' => 17, 'label' => 'צדקה', 'roles' => ['office']],
         ]);
     }
 
