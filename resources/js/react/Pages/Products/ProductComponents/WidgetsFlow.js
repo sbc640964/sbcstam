@@ -1,5 +1,3 @@
-import {FiMapPin, WiStars} from "react-icons/all";
-import {FiEdit3} from "react-icons/fi";
 import _ from "lodash";
 import CurrencyFormatSwitcher from "../../../Components/currencyFormatSwitcher";
 import {useEffect, useState} from "react";
@@ -12,14 +10,14 @@ function WidgetsFlow (props)
         allExpenses: 0,
         allExpectExpenses: 0,
     })
-    
+
     useEffect(() => {
         setStatuses({
             allExpenses: allExpenses(),
             allExpectExpenses: allExpectExpenses(),
         })
     },[product])
-    
+
     const allExpenses = () => {
 
         let expenses = product.expense;

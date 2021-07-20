@@ -10,11 +10,14 @@ import {FiCheckCircle, FiEye, FiLock, FiRotateCcw, FiUnlock} from "react-icons/a
 import {FiEdit3, FiTrash2, FiXCircle} from "react-icons/fi";
 import SaleProduct from "./SaleProduct";
 import axios from "axios";
-import useModal from "../../../Uses/useModal";
 import ConfirmModal from "../../../Components/Modals/ConfirmModal";
 import {useEffect, useState} from "react";
 import SecondaryButton from "../../../Components/Buttons/SecondaryButton";
 import PrimaryButton from "../../../Components/Buttons/PrimaryButton";
+import useBaseModal from "../../../Uses/useBaseModal";
+import ScrollBoxShadow from "../../../Components/ScrollBox/ScrollBoxShadow";
+import FormElements from "../../../Components/Forms";
+import {useToasts} from "react-toast-notifications";
 
 function Orders (props)
 {
@@ -125,8 +128,7 @@ export default Orders;
 
 /*********************/
 
-function Actions (props)
-{
+function Actions (props) {
     const {
         product,
         sale,
@@ -134,94 +136,99 @@ function Actions (props)
         finalOrder
     } = props;
 
-    const deleteSale = () =>
-    {
+    const cancelSale = () => {
         axios.delete(`${window.baseApiPath}/products/${product.id}/orders/${sale.id}`)
-            .then( res =>
+            .then(res =>
                 setProduct(res.data)
             )
             .catch()
     }
 
-    const [isLock, setLock] =  useState(false);
+    const [isLock, setLock] = useState(false);
 
     useEffect(() => {
-        setLock(_.includes([2,3], sale.pivot.status.value));
-    },[sale]);
+        setLock(_.includes([2, 3], sale.pivot.status.value));
+    }, [sale]);
 
-    const reSale = () =>
-    {
+    const reSale = () => {
         axios.put(`${window.baseApiPath}/products/${product.id}/resale/${sale.id}`)
-            .then( res =>
+            .then(res =>
                 setProduct(res.data)
             )
             .catch()
     }
 
-    return(
+    return (
         <div className="flex space-s-3 justify-end w-full text-lg items-center">
-            {_.includes([4,5], sale.pivot.status.value) && !finalOrder &&
-                <FiRotateCcw class="hover:opacity-100 opacity-50 cursor-pointer" onClick={reSale}/>
+            {_.includes([4, 5], sale.pivot.status.value) && !finalOrder &&
+            <FiRotateCcw class="hover:opacity-100 opacity-50 cursor-pointer" onClick={reSale}/>
             }
 
             {sale.pivot.status.value === 2 &&
-                <CompleteSaleConfirm sale={sale} setProduct={setProduct}/>
+            <CompleteSaleConfirm sale={sale} setProduct={setProduct}/>
             }
 
-            {!_.includes([4,5], sale.pivot.status.value) && (!finalOrder || (finalOrder.id === sale.id && finalOrder.pivot.status.value !== 3)) &&
-                <LockCustomerConfirm sale={sale} setProduct={setProduct} isLock={isLock} setLock={setLock}/>
+            {!_.includes([4, 5], sale.pivot.status.value) && (!finalOrder || (finalOrder.id === sale.id && finalOrder.pivot.status.value !== 3)) &&
+            <LockCustomerConfirm sale={sale} setProduct={setProduct} isLock={isLock} setLock={setLock}/>
             }
-
-            <ShowOrder sale={sale} setProduct={setProduct}/>
 
             {(!finalOrder || finalOrder.pivot.status.value === 2) &&
-                <FiEdit3 class="hover:opacity-100 opacity-50 cursor-pointer"/>
+            <EditSale sale={sale} setProduct={setProduct}/>
             }
 
-            {!isLock && !(_.includes([4,5], sale.pivot.status.value)) &&
-                <FiXCircle class="hover:opacity-100 opacity-50 cursor-pointer" onClick={deleteSale}/>
+            <FiEye class="hover:opacity-100 opacity-50 cursor-pointer"/>
+
+            {!isLock && !(_.includes([4, 5], sale.pivot.status.value)) &&
+            <FiXCircle class="hover:opacity-100 opacity-50 cursor-pointer" onClick={cancelSale}/>
+            }
+            {!isLock &&
+                <DeleteForce sale={sale} setProduct={setProduct}/>
             }
         </div>
     )
 }
 
-function ShowOrder (props)
+function DeleteForce (props)
 {
     const {sale, setProduct} = props;
 
-    const { openModal, closeModal, isOpen, Modal } = useModal({
-        background: "rgba(0, 0, 0, 0.5)"
-    });
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({});
 
-    const handleDelete = () =>
-    {
-        // axios.put(`${window.baseApiPath}/products/${sale.pivot.product_id}/complete/${sale.id}`)
-        //     .then(r => {
-        //         setProduct(r.data)
-        //         closeModal()
-        //     })
+    const deleteOrder = () => {
+        axios.delete(`${window.baseApiPath}/products/${sale.pivot.product_id}/orders/${sale.id}?force=true`)
+            .then(res =>{
+                setProduct(res.data)
+                closeModal()
+            })
+            .catch()
     }
+
+    const message = 'אתה בטוח שברצונך למחוק את הפריט מההזמנה?';
 
     return(
         <>
-            <FiEye class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
+            <FiTrash2 class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
+            {isOpen &&
+                <Modal>
+                    <ConfirmModal closeModal={closeModal} message={message} callback={deleteOrder}/>
+                </Modal>
+            }
+        </>
+    )
+}
+
+function EditSale (props)
+{
+    const {sale, setProduct} = props;
+
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({});
+
+    return(
+        <>
+            <FiEdit3 class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
             {isOpen &&
             <Modal>
-                <div className="bg-white shadow-lg rounded-lg" style={{width: '500px'}}>
-                    <div className="font-semibold text-lg p-4 mb-6">
-                        הזמנה/הצעת מחיר
-                    </div>
-                    <div>
-                        <div className="px-5 py-3.5 bg-gray-100 flex justify-end space-s-4 rounded-b-lg">
-                            <SecondaryButton tag="a" onClick={closeModal}>
-                                ביטול
-                            </SecondaryButton>
-                            <PrimaryButton onClick={handleDelete}>
-                                אישור
-                            </PrimaryButton>
-                        </div>
-                    </div>
-                </div>
+                <EditSaleForm setProduct={setProduct} sale={sale} closeModal={closeModal}/>
             </Modal>
             }
         </>
@@ -232,7 +239,7 @@ function CompleteSaleConfirm(props)
 {
     const {sale, setProduct} = props;
 
-    const { openModal, closeModal, isOpen, Modal } = useModal({
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({
         background: "rgba(0, 0, 0, 0.5)"
     });
 
@@ -263,7 +270,7 @@ function LockCustomerConfirm (props)
 {
     const {sale, setProduct, isLock, setLock} = props;
 
-    const { openModal, closeModal, isOpen, Modal } = useModal({
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({
         background: "rgba(0, 0, 0, 0.5)"
     });
 
@@ -306,7 +313,127 @@ function LockCustomerConfirm (props)
     )
 }
 
-function EditSale (props)
+function EditSaleForm (props)
 {
+    const {
+        sale:_sale,
+        setProduct,
+        closeModal,
+    } = props;
+
+    const [sale, setSale] = useState({
+        currency: {USD: {value: 'USD', label: 'דולר'}, ILS:{value: 'ILS', label: 'ש"ח'}}[_sale.pivot.currency],
+        price: _sale.pivot.price,
+    });
+
+    const [errors, setErrors] = useState({
+
+    });
+
+    const {addToast} = useToasts();
+
+    const handleSubmit = e =>
+    {
+        axios.put(window.baseApiPath+`/products/${_sale.pivot.product_id}/orders/${_sale.pivot.order_id}`, sale)
+            .then(function (res) {
+                setProduct(res.data);
+                closeModal();
+            })
+            .catch(function (err) {
+                if (err.response.status === 422) {
+                    setErrors(err.response.data.errors);
+                    addToast(err.response.data.message, {
+                        type: 'error',
+                        autoDismiss: true,
+                    });
+                } else {
+                    addToast(err.message, {
+                        type: 'error',
+                        autoDismiss: true,
+                    });
+                }
+            })
+
+        e.preventDefault();
+    }
+
+    const handleChange = (e, type = null, name = null) =>
+    {
+        name = name ?? (e.target ? e.target.name : e.name);
+
+        let value;
+
+        if(type && type === 'select'){
+            value = e;
+        }else{
+            value = (e.value ?? e.checked) ?? e.target.value;
+        }
+
+        _.set(sale, name, value);
+        setSale(_.cloneDeep(sale));
+        if(errors[name]){
+            setErrors(_.pickBy(errors, (v, k) => {
+                return k !== name
+            }));
+        }
+    }
+
+    return(
+        <div className="bg-white shadow-lg rounded-lg w-96">
+            <div className="font-semibold text-lg p-4 mb-6">
+                הזמנה/הצעת מחיר
+            </div>
+            <div className="px-6 pb-2">
+                קונה: {_sale.customer.full_name}
+            </div>
+            {/*<div className="flex flex-col space-y-2 px-6">*/}
+            {/*    {Array(3).fill(null).map((v, k) => (*/}
+            {/*        <div className="rounded-lg bg-gray-100 p-2">*/}
+            {/*            מוצר מדהים!*/}
+            {/*        </div>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
+            <div>
+                <ScrollBoxShadow maxHeight="75vh">
+                    <div className="grid grid-cols-4 p-6">
+                        <div className="col-span-4">
+                            <FormElements.Number
+                                label="מחיר מכירה"
+                                placeholder="מחיר"
+                                value={sale.price}
+                                onChange={handleChange}
+                                name="price"
+                                errors={errors.price}
+                            />
+                        </div>
+                        <div className="col-span-4">
+                            <FormElements.Select
+                                label="מטבע"
+                                placeholder="בחר מטבע"
+                                value={sale.currency?.label ?? ''}
+                                onChange={handleChange}
+                                name="currency"
+                                errors={errors.currency}
+                                options={[
+                                    {value: 'USD', label: 'דולר'},
+                                    {value: 'ILS', label: 'ש"ח'},
+                                ]}
+                            />
+                        </div>
+                    </div>
+                </ScrollBoxShadow>
+            </div>
+            <div>
+                <div className="px-5 py-3.5 bg-gray-100 flex justify-end space-s-4 rounded-b-lg">
+                    <SecondaryButton tag="a" onClick={closeModal}>
+                        ביטול
+                    </SecondaryButton>
+                    <PrimaryButton onClick={handleSubmit}>
+                        אישור
+                    </PrimaryButton>
+                </div>
+            </div>
+        </div>
+    )
 
 }

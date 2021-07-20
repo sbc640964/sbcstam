@@ -1,14 +1,10 @@
 import React from "react";
-import useModal from "../../../Uses/useModal";
-import ChangeStatus from "./ChangeStatus";
 import {FiEdit3} from 'react-icons/fi'
-import UpdateProductStatusAndExpenses from "./UpdateProductStatusAndExpenses";
+import useBaseModal from "../../../Uses/useBaseModal";
 
 function EditIconModal(props)
 {
-    const { openModal, closeModal, isOpen, Modal } = useModal({
-        background: "rgba(0, 0, 0, 0.5)"
-    });
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({});
 
     return(
         <>

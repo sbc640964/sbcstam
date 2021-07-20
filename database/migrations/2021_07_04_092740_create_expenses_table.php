@@ -12,9 +12,9 @@ class CreateExpensesTable extends Migration
             $table->bigIncrements('id');
             $table->string('type');
             $table->text('note')->nullable();
-            $table->foreignId('to')->nullable()->constrained('profiles');
-            $table->foreignId('of')->nullable()->constrained('profiles');
-            $table->foreignId('product_id')->nullable()->constrained();
+            $table->foreignId('to')->nullable()->constrained('profiles')->nullOnDelete();
+            $table->foreignId('of')->nullable()->constrained('profiles')->nullOnDelete();
+            $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
             $table->float('amount');
             $table->string('currency');
             $table->float('exchange_rates');

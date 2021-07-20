@@ -1,9 +1,9 @@
-import {useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Heading1 from "../../Components/typography/Heading1";
 import Card from "../../Components/Cards/Card";
-import {FiPhone, FiSmartphone} from "react-icons/fi";
+import {FiPhone, FiSmartphone, FiTrash2} from "react-icons/fi";
 import Description from "../../Components/typography/Description";
 import Heading3 from "../../Components/typography/Heading3";
 import {FaRegEnvelope} from "react-icons/fa";
@@ -15,6 +15,11 @@ import Orders from "./ProductComponents/Orders";
 import WidgetsFlow from "./ProductComponents/WidgetsFlow";
 import UpdateProductStatusAndExpenses from "./ProductComponents/UpdateProductStatusAndExpenses";
 import EditIconModal from "./ProductComponents/EditIconModal";
+import useBaseModal from "../../Uses/useBaseModal";
+import ConfirmModal from "../../Components/Modals/ConfirmModal";
+import SecondaryButton from "../../Components/Buttons/SecondaryButton";
+import PrimaryButton from "../../Components/Buttons/PrimaryButton";
+import FormElements from "../../Components/Forms";
 
 function Product (props)
 {
@@ -45,12 +50,17 @@ function Product (props)
                         </Heading1>
 
                     </div>
-                    <EditIconModal>
-                        <UpdateProductStatusAndExpenses
-                            product={productData}
-                            setProduct={setProductData}
+                    <div className="flex space-s-4">
+                        <EditIconModal>
+                            <UpdateProductStatusAndExpenses
+                                product={productData}
+                                setProduct={setProductData}
+                            />
+                        </EditIconModal>
+                        <DeleteProduct
+                            product={productData.id}
                         />
-                    </EditIconModal>
+                    </div>
                 </div>
                 <div className="grid grid-cols-12 gap-4">
                     <WidgetsFlow product={productData}/>
@@ -128,7 +138,7 @@ function Product (props)
                     {productData.children.length > 0 &&
                         <ChildrenProduct product={productData} setProduct={setProductData}/>
                     }
-                    <Expenses product={productData}/>
+                    <Expenses product={productData} setProduct={setProductData}/>
                     <Orders product={productData} setProduct={setProductData}/>
                 </div>
             </div>
@@ -139,3 +149,63 @@ function Product (props)
 }
 
 export default Product;
+
+
+function DeleteProduct ({product})
+{
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({});
+
+    const [deleteExpenses, setDeleteExpenses] = useState(true);
+
+    const [redirect, setRedirect] = useState(false);
+
+    const deleteProduct = () => {
+        axios.delete(`${window.baseApiPath}/products/${product}?expensesDel=${deleteExpenses}`)
+            .then(res =>{
+                setRedirect(true)
+                closeModal()
+            })
+            .catch()
+    }
+
+    const message = 'אתה בטוח שברצונך למחוק המוצר?';
+
+    return(
+        <>
+            {redirect &&
+                <Redirect to="/products"/>
+            }
+            <FiTrash2 class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
+            {isOpen &&
+            <Modal>
+                <div className="bg-white shadow-lg rounded-lg" style={{width: '500px'}}>
+                    <div className="font-semibold text-lg p-4 mb-6">
+                        <div>
+                            {message}
+                        </div>
+                        <FormElements.Switcher
+                            label="למחוק הוצאות של המוצר"
+                            checked={deleteExpenses ?? false}
+                            onChange={() => setDeleteExpenses(v => !v)}
+                            name="deleteExpenses"
+                            disabledLabel="לא, ההוצאות יהפכו להוצאות גלובליות"
+                            enabledLabel="כן"
+                            //errors={errors.initial_expenditure_auto}
+                        />
+                    </div>
+                    <div>
+                        <div className="px-5 py-3.5 bg-gray-100 flex justify-end space-s-4 rounded-b-lg">
+                            <SecondaryButton tag="a" onClick={closeModal}>
+                                ביטול
+                            </SecondaryButton>
+                            <PrimaryButton onClick={deleteProduct}>
+                                אישור
+                            </PrimaryButton>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+            }
+        </>
+    )
+}

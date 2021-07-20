@@ -15,3 +15,20 @@ body{
 button:focus{
   outline: none;
 }
+.bottom-shadow::after, .top-shadow::before{
+    content: '';
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    margin-inline-end: 8px;
+}
+.bottom-shadow::after{
+    box-shadow: 0 -1em 1em -1em rgba(0,0,0,0.2) inset;
+}
+.top-shadow::before{
+    box-shadow: 0 1em 1em -1em rgba(0,0,0,0.2) inset;
+}

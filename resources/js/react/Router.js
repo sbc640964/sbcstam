@@ -4,18 +4,16 @@ import {
     Redirect,
 } from 'react-router-dom'
 
-import _ from 'lodash';
-
 import Products from "./Pages/Products/Products";
 import NewProduct from "./Pages/Products/NewProduct";
-import {useToasts} from "react-toast-notifications";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Profile from "./Pages/Profiles/Profile";
 import Profiles from "./Pages/Profiles/Profiles";
 import NewProfile from "./Pages/Profiles/NewProfile";
 import Product from "./Pages/Products/Product";
 import Orders from "./Pages/Orders/Orders";
 import Settings from "./Pages/Settings/Settings";
+import Overview from "./Pages/Overview/Overview";
 
 
 // function _Route(props)
@@ -99,6 +97,11 @@ function Router()
             </Route>
             <Route path="/settings">
                 <Settings/>
+            </Route>
+
+
+            <Route path="/" middleware={true}>
+                <Overview/>
             </Route>
         </Switch>
     )

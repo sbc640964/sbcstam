@@ -3,13 +3,10 @@ import Card from "../../Components/Cards/Card";
 import Table from "../../Components/Table/Table";
 import Heading1 from "../../Components/typography/Heading1";
 
-import {FiLink} from 'react-icons/fi';
 import {Link} from "react-router-dom";
 
 import _ from 'lodash';
 
-import ProductNames from "../../ObjectsData/Products";
-import TypeWriting from "../../ObjectsData/TypeWriting";
 import ProductStatuses from "../../ObjectsData/ProductStatuses";
 
 

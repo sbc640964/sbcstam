@@ -6,7 +6,6 @@ import {useState} from "react";
 import {FiPlus, FiCheck} from 'react-icons/fi'
 import SecondaryButton from "../../Components/Buttons/SecondaryButton";
 import PrimaryButton from "../../Components/Buttons/PrimaryButton";
-import _ from "lodash";
 import TextInput from "../../Components/Forms/TextInput";
 
 function Permissions(props)

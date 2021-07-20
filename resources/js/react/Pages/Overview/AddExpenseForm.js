@@ -1,20 +1,17 @@
-import Heading3 from "../../../Components/typography/Heading3";
-import FormElements from "../../../Components/Forms";
-import SecondaryButton from "../../../Components/Buttons/SecondaryButton";
-import PrimaryButton from "../../../Components/Buttons/PrimaryButton";
+import Heading3 from "../../Components/typography/Heading3";
+import FormElements from "../../Components/Forms";
+import SecondaryButton from "../../Components/Buttons/SecondaryButton";
+import PrimaryButton from "../../Components/Buttons/PrimaryButton";
 import _ from "lodash";
 import {useState} from "react";
 import {useToasts} from "react-toast-notifications";
 import axios from "axios";
-import Description from "../../../Components/typography/Description";
+import Description from "../../Components/typography/Description";
 
 function AddExpenseForm(props)
 {
     const {
-        product,
         closeModal,
-        setProduct,
-        parent = null,
     } = props;
 
     const [newExpense, setNewExpense] = useState({
@@ -52,13 +49,14 @@ function AddExpenseForm(props)
 
     const handleSubmit = e =>
     {
-        const send = axios.post(window.baseApiPath+`/products/${product.id}/expense`, newExpense);
+        const send = axios.post(window.baseApiPath+`/expenses`, newExpense);
 
         send.then(function (res) {
-            // let p = parent ?? product;
-            // p.expense.push(res.data);
-            setProduct(res.data);
             closeModal();
+            addToast('ההוצאה נוספה!', {
+                type: 'success',
+                autoDismiss: true,
+            });
         })
             .catch(function (err) {
                 if (err.response.status === 422) {
@@ -103,7 +101,6 @@ function AddExpenseForm(props)
         >
             <div className="p-6">
                 <Heading3>עדכון הוצאה/חוב חדש</Heading3>
-                <Description>מזהה: {product.id}, {product.name.label ? product.name.label : product.description}</Description>
                 <br/>
                 <div>
                     <FormElements.Select2
@@ -118,20 +115,6 @@ function AddExpenseForm(props)
                         urlOptions={`${window.baseApiPath}/lists-data/expensesTypes`}
                     />
                 </div>
-                {newExpense.type?.toSeller &&
-                    <div className="col-span-4 pt-2">
-                        <FormElements.Switcher
-                            label="לחייב את כרטיס המוכר?"
-                            checked={newExpense.forSeller ?? false}
-                            onChange={handleChange}
-                            name="forSeller"
-                            disabledLabel="לא"
-                            enabledLabel="כן"
-                            errors={errors.forSeller}
-                        />
-                    </div>
-                }
-                {newExpense.type && newExpense.type.value !== 1 &&
                 <div>
                     <FormElements.Select2
                         label="ספק"
@@ -145,7 +128,6 @@ function AddExpenseForm(props)
                         selectorView={i => i.full_name}
                     />
                 </div>
-                }
                 <div>
                     <FormElements.Textarea
                         label="הערה"
@@ -216,7 +198,7 @@ function AddExpenseForm(props)
                 <SecondaryButton tag="a" onClick={closeModal}>
                     ביטול
                 </SecondaryButton>
-                <PrimaryButton disabled={!_.isEmpty(errors)}>
+                <PrimaryButton>
                     הוסף הוצאה
                 </PrimaryButton>
             </div>

@@ -2,8 +2,8 @@ import _ from "lodash";
 import {AiOutlineFontSize, FiMapPin, FiPackage, WiStars} from "react-icons/all";
 import {FiChevronLeft, FiEdit3, FiShoppingCart} from "react-icons/fi";
 import SaleProduct from "./SaleProduct";
-import useModal from "../../../Uses/useModal";
 import ChangeStatus from "./ChangeStatus";
+import useBaseModal from "../../../Uses/useBaseModal";
 
 function Widgets (props)
 {
@@ -76,7 +76,7 @@ function Widgets (props)
                     </div>
                     <div className="p-1 flex items-center space-s-3 flex-grow px-3">
                         <div className="text-3xl font-bold">{product.children.length}</div>
-                        <div className="text-lg">{product.name.children?.labels[0] ?? 'מוצרים' }</div>
+                        <div className="text-lg">{product.name.children?.labels[0] ?? product.name.label }</div>
                         <div className="text-lg flex-grow flex items-center justify-end pe-2">
                             <FiChevronLeft className="hover:opacity-80 cursor-pointer" onClick={() => goTo('#children')}/>
                         </div>
@@ -108,9 +108,7 @@ function EditStatus (props)
 {
     const {product, setProduct} = props;
 
-    const { openModal, closeModal, isOpen, Modal } = useModal({
-        background: "rgba(0, 0, 0, 0.5)"
-    });
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({});
 
 
     return(

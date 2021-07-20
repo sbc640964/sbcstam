@@ -7,20 +7,18 @@ export const useModal = ({ onOpen, onClose, background, classNameModal, style, .
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    z-index: 1000;
+    z-index: 999;
     height: 90vh;
   `;
 
-    const h = document.body.clientHeight;
-    //console.log(h)
     const backgroundStyle = `
     position: absolute;
     background: ${background || "transparent"};
     width: 100vw;
-    height: ${h}px;
+    height: 100vh;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 999;
   `;
 
     const modal = useRef();
@@ -29,7 +27,11 @@ export const useModal = ({ onOpen, onClose, background, classNameModal, style, .
         onOpen(event) {
             const { portal } = event;
             // eslint-disable-next-line no-param-reassign
+            console.log(background);
             portal.current.style.cssText = background ? backgroundStyle : modalStyle;
+            const docHeight = document.body.scrollHeight;
+            portal.current.style.height = docHeight + 'px'
+
             if (onOpen) onOpen(event);
         },
         onClose(event) {

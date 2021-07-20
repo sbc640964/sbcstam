@@ -1,6 +1,4 @@
 import CurrencyFormatSwitcher from "../../../Components/currencyFormatSwitcher";
-import AddExpense from "./AddExpense";
-import MarkReceived from "./MarkReceived";
 import EditIconModal from "./EditIconModal";
 import UpdateProductStatusAndExpenses from "./UpdateProductStatusAndExpenses";
 import {FiMapPin} from "react-icons/all";
@@ -17,11 +15,11 @@ function Child (props)
         <div className="border rounded-lg p-4 col-span-4 text-center text-gray-800 flex justify-between items-center">
             {child.description}
             <div className="text-sm font-semibold text-gray-500">
-                {child.payment_units} {product.name.units_labels[0]}
+                {child.payment_units} {product.name.units_labels ? product.name.units_labels[0] : product.name.label}
             </div>
             <div className="text-sm font-semibold text-gray-500">
                 <span className="me-1 font-normal">
-                  מחיר ל{product.name.children.labels[1]}:
+                  מחיר ל{product.name.children?.labels ? product.name.children?.labels[1] : product.name.label}:
                 </span>
                 <span>
                   <CurrencyFormatSwitcher>{child.cost}</CurrencyFormatSwitcher>

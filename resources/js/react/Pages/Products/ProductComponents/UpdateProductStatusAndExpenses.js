@@ -7,6 +7,7 @@ import PrimaryButton from "../../../Components/Buttons/PrimaryButton";
 import _ from "lodash";
 import {useToasts} from "react-toast-notifications";
 import axios from "axios";
+import ScrollBoxShadow from "../../../Components/ScrollBox/ScrollBoxShadow";
 
 function UpdateProductStatusAndExpenses (props)
 {
@@ -150,6 +151,15 @@ function UpdateProductStatusAndExpenses (props)
         setshadows({top: true, bottom: true});
     }
 
+    const getFrontQueryStatus = () =>
+    {
+        if(product.status.value < 3) {
+            return 'beforeReceived'
+        }else{
+            return 'edit'
+        }
+    }
+
     return (
         <div
             className="bg-white rounded-lg w-96 shadow-2xl max-h-full transform absolute left-1/2 top-0 -translate-x-1/2"
@@ -159,19 +169,8 @@ function UpdateProductStatusAndExpenses (props)
                     <Heading3>עדכון {parent ? parent.name.children.labels[1] : 'מוצר'}</Heading3>
                     <Description>מזהה: {product.id}, {product.name.label ? product.name.label : product.description}</Description>
                 </div>
-                <div className="p-6 pt-0 relative scrollbar-thumb-gray-500 scrollbar-thin overflow-auto scrollbar-track-gray-200"
-                     style={{maxHeight: '75vh'}}
-                     onScroll={checkScroll}
-                >
-                    {shadows.top &&
-                        <div
-                            className="absolute top-0 left-0 bottom-0 right-0 shadow-2xl"
-                            style={{boxShadow: '0 1em 1em -1em black inset'}}
-                        >
-
-                        </div>
-                    }
-                    <div className="grid grid-cols-4 gap-4">
+                <ScrollBoxShadow maxHeight="75vh">
+                    <div className="grid grid-cols-4 gap-4 p-6">
                         {productData.type !== 'child' &&
                             <>
                                 <div className="col-span-4">
@@ -218,7 +217,7 @@ function UpdateProductStatusAndExpenses (props)
                                     search={false}
                                     errors={errors.status}
                                     value={productData.status ?? ''}
-                                    urlOptions={`${window.baseApiPath}/lists-data/statuses?key=view_frontend.edit&`}
+                                    urlOptions={`${window.baseApiPath}/lists-data/statuses?key=view_frontend.${getFrontQueryStatus()}&s=true`}
                                 />
                             </div>
 
@@ -375,8 +374,7 @@ function UpdateProductStatusAndExpenses (props)
                         }
 
                     </div>
-
-                </div>
+                </ScrollBoxShadow>
                 <div className="px-5 py-3.5 bg-gray-100 flex justify-end space-s-4 rounded-b-lg">
                     <SecondaryButton tag="a" onClick={closeModal}>
                         ביטול

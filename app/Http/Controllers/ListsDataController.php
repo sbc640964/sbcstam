@@ -31,6 +31,9 @@ class ListsDataController extends Controller
                 if(is_bool($value)){
                     $value = var_export($value, true);
                 }
+                if($value === 'true'){
+                    return true;
+                }
                 return false !== stripos($value,$params['s'] ?? '');
             });
         }

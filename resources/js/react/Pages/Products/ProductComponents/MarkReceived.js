@@ -1,12 +1,12 @@
-import useModal from "../../../Uses/useModal";
 import {FiCheckSquare} from "react-icons/fi";
 import MarkReceivedForm from "./MarkReceivedForm";
+import useBaseModal from "../../../Uses/useBaseModal";
 
 function MarkReceived (props)
 {
     const {product, setProduct, parent} = props;
 
-    const { openModal, closeModal, isOpen, Modal } = useModal({
+    const { openModal, closeModal, isOpen, Modal } = useBaseModal({
         background: "rgba(0, 0, 0, 0.5)"
     });
 

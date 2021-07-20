@@ -69,6 +69,52 @@ class ExpensesController extends Controller
         return $data;
     }
 
+    public function storeGeneral(Request $request)
+    {
+        $data = $request->validate([
+            'type'              => 'required',
+            'note'              => 'nullable',
+            'to'                => 'nullable',
+            'amount'            => 'required|numeric',
+            'currency'          => 'required',
+            'immediatePayment'  => 'boolean',
+            'method'            => 'nullable',
+        ]);
+
+        $data['type'] = $data['type']['value'];
+        $data['to'] = isset($data['to']) ? $data['to']['id'] : null;
+        $data['currency'] = $data['currency']['value'];
+        $data['method'] = isset($data['method']) ? $data['method']['value'] : null;
+        $data['exchange_rates'] = Utils::getExchangeRates('USD');
+
+        DB::transaction(function () use($data) {
+                return tap(
+                    Expense::create(Arr::only($data, [
+                        'type',
+                        'note',
+                        'to',
+                        'amount',
+                        'currency',
+                        'exchange_rates'
+                    ])),
+
+                    function (Expense $expense) use($data) {
+
+                        if($data['immediatePayment'] ?? false){
+                            clock($expense->to);
+                            $expense->payment()->create([
+                                'method'        => $data['method'] ?? null,
+                                'amount'        => $expense->amount['original'],
+                                'to'            => $expense->to,
+                                'exchange_rates'=> $expense->exchange_rates,
+                                'currency'      => $expense->currency
+                            ]);
+                        }
+                    }
+                );
+            });
+    }
+
 
     public function store(Product $product, Request $request)
     {

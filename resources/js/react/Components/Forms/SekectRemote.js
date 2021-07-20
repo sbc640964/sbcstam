@@ -4,6 +4,7 @@ import _ from 'lodash';
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {useToasts} from "react-toast-notifications";
+import {useDropdown} from "../../Uses/useDropdown";
 
 function SelectRemote(props)
 {
@@ -27,6 +28,8 @@ function SelectRemote(props)
     const [options, setOptions] = useState([]);
     const [cursor, setCursor] = useState(0);
     const [originalOptions, setOriginalOptions] = useState([]);
+
+    const { toggleDropdown, isOpen, Dropdown } = useDropdown();
 
     useEffect(() => {
 
@@ -94,7 +97,7 @@ function SelectRemote(props)
 
     const handleClick = (item) =>
     {
-        setShowOptions(false);
+        toggleDropdown();
         props.onChange(item, 'select', props.name);
     }
 
@@ -132,7 +135,6 @@ function SelectRemote(props)
 
     const blurInput = (e) => {
         setSearch('');
-        setShowOptions(false);
         setCursor(0);
     }
 
@@ -186,25 +188,27 @@ function SelectRemote(props)
                             autoComplete="off"
                             className={classes}
                             onChange={e => setSearch(e.target.value)}
-                            onFocus={() => setShowOptions(true)}
+                            onClick={toggleDropdown}
                             onKeyDown={navigate}
                             onBlur={(e) => setTimeout(() => blurInput(e), 200)}
                         />
                     </div>
                 </label>
-                {showOptions &&
-                <div tabIndex={1} ref={optionsElement} className="max-h-60 absolute bg-white rounded-lg mt-1 shadow-lg block w-full top-full left-0 z-50 overflow-auto scrollbar-thin scrollbar-thumb-gray-500">
-                    {options.length
-                        ? options.map((item, index) => (
-                            <div tabIndex={index + 1} key={index} className={`${index === cursor ? 'bg-primary-200' : ''} p-2 hover:bg-primary-50 cursor-pointer`} onClick={() => handleClick(item)}>{_selectorView(item)}</div>
-                        ))
-                        : <div className="text-center p-4">
-                            {textPlaceHolder()}
-                          </div>
+                {isOpen &&
+                    <Dropdown>
+                        <div tabIndex={1} ref={optionsElement} className="max-h-60 absolute bg-white rounded-lg mt-1 shadow-lg block w-full top-full left-0 z-50 overflow-auto scrollbar-thin scrollbar-thumb-gray-500">
+                            {options.length
+                                ? options.map((item, index) => (
+                                    <div tabIndex={index + 1} key={index} className={`${index === cursor ? 'bg-primary-200' : ''} p-2 hover:bg-primary-50 cursor-pointer`} onClick={() => handleClick(item)}>{_selectorView(item)}</div>
+                                ))
+                                : <div className="text-center p-4">
+                                    {textPlaceHolder()}
+                                </div>
 
 
-                    }
-                </div>
+                            }
+                        </div>
+                    </Dropdown>
                 }
             </div>
             {errors &&

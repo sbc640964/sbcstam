@@ -11,7 +11,6 @@ import axios from "axios";
 import _ from 'lodash';
 import {Redirect} from "react-router-dom";
 
-import Products from '../../ObjectsData/Products'
 import TypeWriting from '../../ObjectsData/TypeWriting'
 
 function NewProduct(props)
@@ -228,6 +227,33 @@ function NewProduct(props)
                                     ]}
                                 />
                             </div>
+                            {newProduct.name?.type !== 'package' &&
+                                <>
+                                    <div className="col-span-4 lg:col-span-2">
+                                        <FormElements.Switcher
+                                            label="חבילת מוצרים"
+                                            checked={newProduct.package ?? false}
+                                            onChange={handleChange}
+                                            name="package"
+                                            disabledLabel="לא, מוצר יחיד."
+                                            enabledLabel="כן, חבילה מכילה מס' פרטים  משוכפלים"
+                                            errors={errors.package}
+                                        />
+                                    </div>
+                                    {newProduct.package &&
+                                        <div className="col-span-4 lg:col-span-2">
+                                            <FormElements.Number
+                                                label={`יחידות לשכפול`}
+                                                placeholder="יחידות"
+                                                value={newProduct.qty}
+                                                onChange={handleChange}
+                                                name="qty"
+                                                errors={errors.qty}
+                                            />
+                                        </div>
+                                    }
+                                </>
+                            }
                             {!_.includes([1, 2], newProduct.status?.value) &&
                                 <div className="col-span-4">
                                     <FormElements.Switcher

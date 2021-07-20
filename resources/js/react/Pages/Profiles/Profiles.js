@@ -7,11 +7,6 @@ import {FiPhone} from 'react-icons/fi';
 import {FaRegEnvelope} from 'react-icons/fa';
 import {Link} from "react-router-dom";
 
-import ProductNames from "../../ObjectsData/Products";
-import TypeWriting from "../../ObjectsData/TypeWriting";
-import ProductStatuses from "../../ObjectsData/ProductStatuses";
-
-
 
 ///company name column
 function ProfileName (row, col, options)

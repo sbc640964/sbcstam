@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\Order;
 use App\Models\Product;
 use App\Utils;
@@ -50,39 +51,44 @@ class ProductsController extends Controller
             'name' => 'required',
             'status' => 'required',
             'description' => '',
-            'size' => 'required|numeric',
-            'level' => 'required|numeric',
+            'size' => 'required|numeric|min:1',
+            'level' => 'required|numeric|min:1',
             'type_writing' => 'required',
             'scribe_seller' => 'boolean|required',
             'scribe' => 'required_if:scribe_seller,false',
             'currency' => 'required',
-            'cost_unit' => 'required',
+            'cost_unit' => 'required|min:1',
             'payment_units' => 'nullable',
-            'initial_expenditure_auto' => 'nullable'
+            'initial_expenditure_auto' => 'nullable',
+            'package' => 'nullable|boolean',
+            'qty' => 'numeric|required_if:package,true|min:2',
         ]);
 
         $data['type'] = $data['name']['type'] ?? 'simple';
 
-        DB::transaction(function () use ($data) {
-               tap(
-                   Product::create([
-                       'seller' => $data['seller']['id'],
-                       'scribe' => $data['scribe_seller']
-                           ? $data['seller']['id']
-                           : (isset($data['scribe']) ? $data['scribe']['id'] : false),
-                       'name' => $data['name']['value'],
-                       'status' => $data['status']['value'],
-                       'description' => $data['description'] ?? null,
-                       'size' => $data['size'],
-                       'level' => $data['level'],
-                       'currency' => $data['currency']['value'],
-                       'payment_units' => $data['payment_unit'] ?? 1,
-                       'cost_unit' => $data['cost_unit'],
-                       'type_writing' => $data['type_writing']['value'],
-                       'type' => $data['type'],
-                   ]),
+        $productInsert = [
+            'seller' => $data['seller']['id'],
+            'scribe' => $data['scribe_seller']
+                ? $data['seller']['id']
+                : (isset($data['scribe']) ? $data['scribe']['id'] : false),
+            'name' => $data['name']['value'],
+            'status' => $data['status']['value'],
+            'description' => $data['description'] ?? null,
+            'size' => $data['size'],
+            'level' => $data['level'],
+            'currency' => $data['currency']['value'],
+            'payment_units' => $data['payment_unit'] ?? 1,
+            'cost_unit' => $data['cost_unit'],
+            'type_writing' => $data['type_writing']['value'],
+            'type' => (isset($data['package']) && $data['package']) ? 'package' : $data['type'],
+        ];
 
-                   function (Product $product) use ($data) {
+        DB::transaction(function () use ($data, $productInsert) {
+               tap(
+
+                   Product::create($productInsert),
+
+                   function (Product $product) use ($data, $productInsert) {
 
                        if($data['type'] === 'package'
                            && isset($data['name']['children_auto'])
@@ -90,6 +96,19 @@ class ProductsController extends Controller
                            && isset($data['name']['children'])
                            && !empty($children = $this->prepareChildren($data, $product))
                        ) {
+                           $product->children()->createMany($children);
+                       }
+
+                       if ($data['type'] !== 'package' && isset($data['package']) && $data['package']){
+                           $children = [];
+
+                           foreach (range(0, $data['qty'] -1) as $k => $c){
+                               array_push($children, array_merge($productInsert, [
+                                   'description' => "מזוזה " . ($k + 1),
+                                   'type' => 'child',
+                               ]));
+                           }
+
                            $product->children()->createMany($children);
                        }
 
@@ -215,15 +234,13 @@ class ProductsController extends Controller
         return $this->show($id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Product $product
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Product $product)
     {
-        //
+        if(request('expensesDel')){
+            $product->expense()->delete();
+        }
+
+        $product->delete();
     }
 
     public function prepareChildren($data, $product)
@@ -266,7 +283,11 @@ class ProductsController extends Controller
                 return $product->cost_unit;
                 break;
             case 'package' :
-                $units_payments = $product->name['children']['units_payments'];
+                if($product->name['type'] === 'package'){
+                    $units_payments = $product->name['children']['units_payments'];
+                }else{
+                    $units_payments = $product->children()->count();
+                }
 
                 if(is_array($units_payments)){
                     $units_payments = array_sum(array_map(function ($value){
@@ -279,12 +300,18 @@ class ProductsController extends Controller
         }
     }
 
-    public function detachOrder (Product $product, Order $order)
+    public function detachOrder (Product $product, Order $order, Request $request)
     {
-        $product->orders()->updateExistingPivot($order, [
-            'active' => false,
-            'status'    => 4,
-        ]);
+        clock($request->get('force'));
+        if($request->get('force')){
+            $product->orders()->detach($order->id);
+        }
+        else{
+            $product->orders()->updateExistingPivot($order, [
+                'active' => false,
+                'status'    => 4,
+            ]);
+        }
 
         return $this->show($product->id);
     }
@@ -323,6 +350,28 @@ class ProductsController extends Controller
     public function completeOrder (Product $product, Order $order)
     {
         $product->orders()->updateExistingPivot($order->id, ['status' => 3]);
+
+        return $this->show($product->id);
+    }
+
+    public function updateOrder (Product $product, Order $order, Request $request)
+    {
+        $request->validate([
+           'price' => 'required',
+           'currency' => 'required',
+        ]);
+
+        $product->orders()->updateExistingPivot($order->id, [
+            'price' => $request->get('price'),
+            'currency' => $request->get('currency')['value'],
+        ]);
+
+        return $this->show($product->id);
+    }
+
+    public function destroyExpense (Product $product, Expense $expense)
+    {
+        $expense->delete();
 
         return $this->show($product->id);
     }

@@ -10,9 +10,9 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('to')->constrained('profiles');
+            $table->foreignId('to')->nullable()->constrained('profiles')->nullOnDelete();
             $table->float('amount');
-            $table->foreignId('expense_id')->constrained('expenses')->nullable();
+            $table->foreignId('expense_id')->nullable()->constrained('expenses')->cascadeOnDelete();
             $table->string('currency');
             $table->float('exchange_rates');
             $table->string('method')->nullable();

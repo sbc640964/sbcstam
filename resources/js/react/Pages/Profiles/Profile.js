@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Loading from "../../Components/Loadings";
 import EditProfile from "./components/EditProfile";
+import DeleteProfile from "./components/DeleteProduct";
 
 function Profile ()
 {
@@ -40,6 +41,9 @@ function Profile ()
                 {showEdit &&
                     <EditProfile profile={profile} hidden={() => setShowEdit(false)}/>
                 }
+                <DeleteProfile
+                    profileId={profile.id}
+                />
             </div>
         </div>
     )

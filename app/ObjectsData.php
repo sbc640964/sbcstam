@@ -46,9 +46,9 @@ class ObjectsData
                     11 => ['cost' => 1000, 'currency' => 'ILS'],
                 ]
             ],
-            ["value" => 2, "label" => 'תפילין רש"י', "type" => 'simple',],
+            ["value" => 2, "label" => 'תפילין רש"י', "type" => 'simple'],
             ["value" => 3, "label" => 'תפילין ר"ת', "type" => 'simple'],
-            ["value" => 4, "label" => 'מזוזה', "type" => 'simple'],
+            ["value" => 4, "label" => 'מזוזה', "type" => 'simple', 'children' => ['labels' => ['מזוזות', 'מזוזה'],]],
             ["value" => 5, "label" => 'פיטום הקטורת', "type" => 'simple'],
             ["value" => 6,
                 "label" => 'מגילת אסתר',
@@ -84,20 +84,20 @@ class ObjectsData
                 'value' => 1, 'label' => 'בהזמנה',
                 'view_frontend' => [
                     'new' => true,
+                    'beforeReceived' => true,
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#F1F5F9', '#334155']
             ],
             [
                 'value' => 2, 'label' => 'בכתיבה',
                 'view_frontend' => [
                     'new' => true,
+                    'beforeReceived' => true,
                     'received' => true,
                     'edit' => true,
                     'markReceived' => true,
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             ['value' => 3, 'label' => 'ממתין להגהה',
                 'view_frontend' => [
@@ -105,7 +105,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FED7AA', '#9A3412']
             ],
             [
                 'value' => 4, 'label' => 'בהגהת מחשב 1',
@@ -114,7 +113,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FB923C', '#9A3412']
             ],
             [
                 'value' => 5, 'label' => 'ממתין לתיקונים',
@@ -123,7 +121,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 6, 'label' => 'בתיקונים',
@@ -132,7 +129,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 7, 'label' => 'ממתין לסופר',
@@ -141,7 +137,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 8, 'label' => 'סופר ממלא',
@@ -150,7 +145,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 9, 'label' => 'ממתין להגהת מחשב נוספת',
@@ -159,7 +153,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 10, 'label' => 'הגהת מחשב 2',
@@ -168,7 +161,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FB923C', '#991B1B']
             ],
             [
                 'value' => 11, 'label' => 'ממתין לתיקונים',
@@ -177,7 +169,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 12, 'label' => 'תיקונים חוזרים',
@@ -186,7 +177,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 13, 'label' => 'ממתין לשאלת רב',
@@ -195,7 +185,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 14, 'label' => 'ממתין לתיקון מיוחד',
@@ -204,7 +193,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 15, 'label' => 'ממתין לקילוף שם',
@@ -213,7 +201,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 16, 'label' => 'בקילוף שם',
@@ -222,7 +209,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 17, 'label' => 'נשלח לדוגמא',
@@ -231,7 +217,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 18, 'label' => 'נשלח לחו"ל',
@@ -240,7 +225,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 19, 'label' => 'נמכר',
@@ -249,7 +233,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => false
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 20, 'label' => 'חזרות',
@@ -258,7 +241,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
             [
                 'value' => 18, 'label' => 'אחר',
@@ -267,7 +249,6 @@ class ObjectsData
                     'received' => true,
                     'edit' => true
                 ],
-                'color' => ['#FCA5A5', '#991B1B']
             ],
         ]);
     }

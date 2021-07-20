@@ -14,4 +14,5 @@ const mix = require('laravel-mix');
 mix.js('resources/js/react/index.js', 'public/js').react()
     .postCss('resources/css/app.css', 'public/css', [
         require("tailwindcss")
-    ]);
+    ])
+    .browserSync('localhost:8000');

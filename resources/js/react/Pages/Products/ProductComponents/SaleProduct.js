@@ -1,5 +1,4 @@
 import {FiPlus} from "react-icons/fi";
-import useModal from "../../../Uses/useModal";
 // import {motion} from 'framer-motion';
 import FormElements from "../../../Components/Forms";
 import {useState} from "react";
@@ -9,15 +8,11 @@ import SecondaryButton from "../../../Components/Buttons/SecondaryButton";
 import PrimaryButton from "../../../Components/Buttons/PrimaryButton";
 import axios from "axios";
 import {useToasts} from "react-toast-notifications";
+import useBaseModal from "../../../Uses/useBaseModal";
 
 function SaleProduct ({product, setProduct})
 {
-    const {closeModal, isOpen, Modal, openModal} = useModal({
-        // style: `z-index: 1000; width: 350px`,
-        // classNameModal: "top-0 end-0 min-h-screen absolute",
-        background: 'rgba(0,0,0,0.2)',
-        onClose: () => document.body.style.overflow = 'auto',
-        onOpen: () => document.body.style.overflow = 'hidden',
+    const {closeModal, isOpen, Modal, openModal} = useBaseModal({
     });
 
     return(
@@ -45,7 +40,9 @@ function FormSaleProduct (props)
     const {close, product, setProduct} = props;
 
     const [sale, setSale] = useState({
-        product_id: product.id
+        product_id: product.id,
+        price: product.expenses_data.total_expect_expenses.USD,
+        currency: {value: 'USD', label: 'דולר'}
     });
 
     const [errors, setErrors] = useState({
@@ -92,12 +89,33 @@ function FormSaleProduct (props)
             value = (e.value ?? e.checked) ?? e.target.value;
         }
 
+        if(name === 'currency'){
+            let price = sale.price;
+            if(value.value === 'USD'){
+                price = price / window.exchangeRatesUSD;
+            }else{
+                price = price * window.exchangeRatesUSD;
+            }
+            _.set(sale, 'price', price);
+        }
+
         _.set(sale, name, value);
         setSale(_.cloneDeep(sale));
         if(errors[name]){
             setErrors(_.pickBy(errors, (v, k) => {
                 return k !== name
             }));
+        }
+    }
+
+    const onBlurPrice = (e) =>
+    {
+        const value = e.target.value;
+        if(value < product.expenses_data.total_expect_expenses[sale.currency.value]){
+            sale.price = product.expenses_data.total_expect_expenses[sale.currency.value];
+            errors.price = ['אין אפשרות לציין מחיר נמוך מהעלות'];
+            setErrors(_.cloneDeep(errors));
+            setSale(_.cloneDeep(sale))
         }
     }
 
@@ -155,6 +173,7 @@ function FormSaleProduct (props)
                                      onChange={handleChange}
                                      name="price"
                                      errors={errors.price}
+                                     onBlur={onBlurPrice}
                                  />
                              </div>
                              <div className="col-span-4">
@@ -177,7 +196,7 @@ function FormSaleProduct (props)
                          <SecondaryButton tag="a" onClick={close}>
                              ביטול
                          </SecondaryButton>
-                         <PrimaryButton disabled={!_.isEmpty(errors)}>
+                         <PrimaryButton>
                              צור מכירה
                          </PrimaryButton>
                      </div>

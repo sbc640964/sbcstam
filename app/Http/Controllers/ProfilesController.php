@@ -154,14 +154,8 @@ class ProfilesController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Profile $profile
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Profile $profile)
     {
-        //
+        $profile->enable();
     }
 }

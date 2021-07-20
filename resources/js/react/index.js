@@ -7,9 +7,6 @@ import axios from "axios";
 
 axios.defaults.headers.post['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').content;
 
-const t = document.querySelector('meta[name="csrf-token"]').content;
-console.log(t);
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

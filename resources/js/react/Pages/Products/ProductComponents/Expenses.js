@@ -7,6 +7,10 @@ import TableLocal from "../../../Components/Table/TableLocal";
 import 'moment/locale/he';
 import moment from "moment";
 import {FaRegSmileWink} from "react-icons/all";
+import ConfirmModal from "../../../Components/Modals/ConfirmModal";
+import axios from "axios";
+import useBaseModal from "../../../Uses/useBaseModal";
+import {FiTrash2} from "react-icons/fi";
 
 function Expenses (props)
 {
@@ -59,6 +63,9 @@ function Expenses (props)
                                     <div>
                                         {row.product_id === props.product.id ? '' : row.product.description}
                                     </div>
+                            },
+                            {label: '', type: 'cal', cal: row =>
+                                <Actions row={row} setProduct={props.setProduct}/>
                             }
                         ]}
                     />
@@ -69,6 +76,36 @@ function Expenses (props)
 }
 
 export default Expenses;
+
+
+function Actions ({row, setProduct})
+{
+    console.log(setProduct)
+    const { openModal, closeModal, isOpen, Modal }  = useBaseModal({});
+
+    const deleteExpense = () =>
+    {
+        axios.delete(`${window.baseApiPath}/products/${row.product_id}/expenses/${row.id}`)
+            .then(res => {
+                setProduct(res.data)
+                closeModal()
+            })
+            .catch()
+    }
+
+    const message = 'האם אתה בטוח?';
+
+    return(
+        <div>
+            <FiTrash2 class="hover:opacity-100 opacity-50 cursor-pointer" onClick={openModal}/>
+            {isOpen &&
+                <Modal>
+                    <ConfirmModal closeModal={closeModal} message={message} callback={deleteExpense}/>
+                </Modal>
+            }
+        </div>
+    )
+}
 
 
 function NoFindExpanses (props)
