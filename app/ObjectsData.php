@@ -262,7 +262,7 @@ class ObjectsData
             ['value' => 6, 'label' => 'משלוח בינעירוני', "roles" => ['shipping']],
             ['value' => 7, 'label' => 'משלוח חו"ל', "roles" => ['shipping']],
             ['value' => 8, 'label' => 'קילוף שם', "roles" => ['repairer'], 'toSeller' => true],
-            ['value' => 9, 'label' => 'אחר'],
+            ['value' => 9, 'label' => 'אחר','roles' => []],
             ['value' => 10, 'label' => 'קלף', 'roles' => ['scribe_shop']],
             ['value' => 11, 'label' => 'תפירה', 'roles' => ['tailor']],
             ['value' => 11, 'label' => 'תיוג', 'roles' => ['labeling']],
@@ -271,6 +271,8 @@ class ObjectsData
             ['value' => 14, 'label' => 'משכורות', 'roles' => []],
             ['value' => 15, 'label' => 'בונוס', 'roles' => []],
             ['value' => 16, 'label' => 'צדקה', 'roles' => []],
+            ['value' => 17, 'label' => 'קולמוס שמיר', 'roles' => []],
+            ['value' => 18, 'label' => 'תיקון סופרים', 'roles' => []],
         ]);
     }
 
