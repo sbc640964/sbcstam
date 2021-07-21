@@ -27,59 +27,62 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('products')->group(function () {
-    Route::get('/', [ProductsController::class, 'index']);
-    Route::get('/{product}', [ProductsController::class, 'show']);
+Route::middleware(['auth.basic'])->group(function(){
 
-    Route::post('/', [ProductsController::class, 'store']);
-    Route::post('/{product}', [ProductsController::class, 'update']);
-    Route::post('/{product}/expense', [ExpensesController::class, 'store']);
-    Route::post('/{product}/status', [ProductsController::class, 'updateStatus']);
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductsController::class, 'index']);
+        Route::get('/{product}', [ProductsController::class, 'show']);
 
-    Route::delete('/{product}/expenses/{expense}', [ProductsController::class, 'destroyExpense']);
-    Route::delete('/{product}/orders/{order}', [ProductsController::class, 'detachOrder']);
-    Route::delete('/{product}', [ProductsController::class, 'destroy']);
+        Route::post('/', [ProductsController::class, 'store']);
+        Route::post('/{product}', [ProductsController::class, 'update']);
+        Route::post('/{product}/expense', [ExpensesController::class, 'store']);
+        Route::post('/{product}/status', [ProductsController::class, 'updateStatus']);
 
-    Route::put('/{product}/orders/{order}', [ProductsController::class, 'updateOrder']);
-    Route::put('/{product}/lock-sale/{order}', [ProductsController::class, 'lockOrder']);
-    Route::put('/{product}/unlock-sale/{order}', [ProductsController::class, 'unlockOrder']);
-    Route::put('/{product}/resale/{order}', [ProductsController::class, 'resaleOrder']);
-    Route::put('/{product}/complete/{order}', [ProductsController::class, 'completeOrder']);
-});
+        Route::delete('/{product}/expenses/{expense}', [ProductsController::class, 'destroyExpense']);
+        Route::delete('/{product}/orders/{order}', [ProductsController::class, 'detachOrder']);
+        Route::delete('/{product}', [ProductsController::class, 'destroy']);
 
-Route::prefix('profiles')->group(function () {
-    Route::get('/', [ProfilesController::class, 'index']);
-    Route::post('/', [ProfilesController::class, 'store']);
-    Route::get('/{profile}', [ProfilesController::class, 'show']);
-    Route::put('/{profile}', [ProfilesController::class, 'store']);
-    Route::delete('/{profile}', [ProfilesController::class, 'destroy']);
-});
+        Route::put('/{product}/orders/{order}', [ProductsController::class, 'updateOrder']);
+        Route::put('/{product}/lock-sale/{order}', [ProductsController::class, 'lockOrder']);
+        Route::put('/{product}/unlock-sale/{order}', [ProductsController::class, 'unlockOrder']);
+        Route::put('/{product}/resale/{order}', [ProductsController::class, 'resaleOrder']);
+        Route::put('/{product}/complete/{order}', [ProductsController::class, 'completeOrder']);
+    });
 
-Route::prefix('roles')->group(function () {
-    Route::get('/', [RolesController::class, 'index']);
-});
+    Route::prefix('profiles')->group(function () {
+        Route::get('/', [ProfilesController::class, 'index']);
+        Route::post('/', [ProfilesController::class, 'store']);
+        Route::get('/{profile}', [ProfilesController::class, 'show']);
+        Route::put('/{profile}', [ProfilesController::class, 'store']);
+        Route::delete('/{profile}', [ProfilesController::class, 'destroy']);
+    });
 
-Route::prefix('orders')->group(function() {
-    Route::get('/', [OrdersController::class, 'index']);
-    Route::post('/', [OrdersController::class, 'store']);
-    Route::delete('/{order}', [OrdersController::class, 'destroy']);
-});
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [RolesController::class, 'index']);
+    });
 
-Route::prefix('options')->group(function() {
-    Route::post('/', [OptionsController::class, 'store']);
-});
+    Route::prefix('orders')->group(function() {
+        Route::get('/', [OrdersController::class, 'index']);
+        Route::post('/', [OrdersController::class, 'store']);
+        Route::delete('/{order}', [OrdersController::class, 'destroy']);
+    });
 
-Route::prefix('expenses')->group(function(){
-    Route::post('/', [ExpensesController::class, 'storeGeneral']);
-});
+    Route::prefix('options')->group(function() {
+        Route::post('/', [OptionsController::class, 'store']);
+    });
 
-Route::prefix('payments')->group(function(){
-    Route::post('/', [PaymentsController::class, 'store']);
-});
+    Route::prefix('expenses')->group(function(){
+        Route::post('/', [ExpensesController::class, 'storeGeneral']);
+    });
+
+    Route::prefix('payments')->group(function(){
+        Route::post('/', [PaymentsController::class, 'store']);
+    });
 
 
-Route::get('lists-data/{listName}', [ListsDataController::class, 'index']);
+    Route::get('lists-data/{listName}', [ListsDataController::class, 'index']);
 
-Route::get('exchange-rates/{currency}', function ($currency){
-    return Utils::getExchangeRates($currency);
+    Route::get('exchange-rates/{currency}', function ($currency){
+        return Utils::getExchangeRates($currency);
+    });
 });

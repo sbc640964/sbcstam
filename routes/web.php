@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\ListsDataController;
 use App\Http\Controllers\OptionsController;
@@ -27,11 +28,19 @@ Route::get('/login', function () {
 
 Route::get('/register', function () {
     return view('auth.register');
-})->name('register');//->middleware('auth');
+})->name('register')->middleware('auth');
 
-Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'register'])->name('createUser');//->middleware('auth');
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('createUser')->middleware('auth');
+
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login')->middleware('guest');
+
+Route::get('/logout', [AuthController::class, 'logout'])
+    ->name('logout')->middleware('auth');
+
 
 
 Route::get('/{any}', function () {
     return view('app');
-})->where('any', '.*');//->middleware(['auth']);
+})->where('any', '.*')->middleware(['auth']);

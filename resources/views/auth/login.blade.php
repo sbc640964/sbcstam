@@ -18,10 +18,16 @@
             <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
                 <div class="text-sm">אימייל</div>
                 <input type="text" id="email" name="email" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+                @error('email')
+                    <small class="text-error-500">{{$message}}</small>
+                @enderror
             </label>
             <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
                 <div class="text-sm">סיסמא</div>
                 <input type="password" id="password" name="password" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+                @error('password')
+                    <small class="text-error-500">{{$message}}</small>
+                @enderror
             </label>
             <label class="text-gray-800 font-semibold w-full flex space-s-2 items-center justify-start">
                 <input type="checkbox" id="remember" name="remember" class="focus:outline-none rounded border border-gray-300 text-base p-2 "/>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{{mix('css/app.css')}}">
-    <title>Login</title>
+    <title>Register</title>
 
 </head>
 <body class="bg-gray-200 relative min-h-screen">
@@ -17,29 +17,61 @@
         @csrf
         <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
             <div class="text-sm">שם משתמש</div>
-            <input type="text" id="username" name="username" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                class="rounded-lg border border-gray-300 w-full text-base p-2"
+                value="{{old('name')}}"
+            />
+            @error('name')
+                <small class="text-error-500">{{$message}}</small>
+            @enderror
         </label>
         <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
             <div class="text-sm">אימייל</div>
-            <input type="text" id="email" name="email" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+            <input
+                type="text"
+                id="email"
+                name="email"
+                class="rounded-lg border border-gray-300 w-full text-base p-2"
+                value="{{old('email')}}"
+            />
+            @error('email')
+            <small class="text-error-500">{{$message}}</small>
+            @enderror
         </label>
         <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
             <div class="text-sm">סיסמא</div>
-            <input type="password" id="password" name="password" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+            <input
+                type="password"
+                id="password" name="password"
+                class="rounded-lg border border-gray-300 w-full text-base p-2 "
+            />
+            @error('password')
+            <small class="text-error-500">{{$message}}</small>
+            @enderror
         </label>
         <label class="text-gray-800 font-semibold w-full flex flex-col space-y-2">
             <div class="text-sm">אשר סיסמא</div>
-            <input type="password" id="confirm_password" name="confirm_password" class="rounded-lg border border-gray-300 w-full text-base p-2 "/>
+            <input
+                type="password"
+                id="password_confirmation"
+                name="password_confirmation"
+                class="rounded-lg border border-gray-300 w-full text-base p-2 "
+            />
         </label>
         <div class="flex justify-end pt-2">
             <button type="submit" class="bg-primary-600 text-white font-bold rounded-lg p-2 px-4">
                 רישום
             </button>
         </div>
-        @error('username')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
     </form>
+    <div>
+        @if(session()->has('success'))
+            <div class="mt-5 text-green-600 bg-green-100 p-4 rounded-lg flex justify-center items-center font-bold text-xl">{{ session()->get('success') }}</div>
+        @endif
+    </div>
 </div>
 </body>
 </html>
