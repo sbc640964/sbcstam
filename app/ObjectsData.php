@@ -248,6 +248,14 @@ class ObjectsData
                     'edit' => true
                 ],
             ],
+            [
+                'value' => 19, 'label' => 'מוכן למכירה',
+                'view_frontend' => [
+                    'new' => true,
+                    'received' => true,
+                    'edit' => true
+                ],
+            ],
         ]);
     }
 

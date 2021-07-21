@@ -53,9 +53,7 @@ function SelectRemote(props)
         }
         else{
             if(_.isEmpty(originalOptions)){
-
                 getData(urlOptions);
-
             }else{
                 getSearch();
             }
@@ -71,8 +69,8 @@ function SelectRemote(props)
             cancelToken: source?.token,
         })
             .then(function (res){
-                setOptions(res.data);
-                setOriginalOptions(res.data);
+                setOptions(_.values(res.data));
+                setOriginalOptions(_.values(res.data));
             })
             .catch(function (err){
                 addToast(err.message, {
@@ -160,7 +158,8 @@ function SelectRemote(props)
             return 'רק שניה...';
         }
 
-        if ((isSearch && search.length >=3 && !_.isNull(originalOptions)) || (!isSearch && !options.length)) {
+        console.log(options.length)
+        if ((isSearch && search.length >= 3 && !_.isNull(originalOptions)) || (!isSearch && !options.length)) {
             return 'לא מצאנו שום דבר מתאים...';
         }
 
