@@ -173,8 +173,8 @@ class ProductsController extends Controller
 
         DB::transaction(function () use($product, $request, $data) {
 
-            if($received = $request->get('received') || $addExpense = $request->get('addExpense')){
-
+            if(($received = $request->get('received')) || ($addExpense = $request->get('addExpense'))){
+            clock($received);
                 $newData = [
                     'to' => ($received || $data['type']['value'] === 1) ? $product->seller : $data['to']['id'],
                     'type' => $received ? 1 : $data['type']['value'],
